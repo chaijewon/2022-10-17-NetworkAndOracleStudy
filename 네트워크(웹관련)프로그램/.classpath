@@ -7,5 +7,6 @@
 		</attributes>
 	</classpathentry>
 	<classpathentry kind="lib" path="C:/javaDev/oracleStudy/JTattoo-1.6.13.jar"/>
+	<classpathentry kind="lib" path="C:/javaDev/oracleStudy/ojdbc8.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
