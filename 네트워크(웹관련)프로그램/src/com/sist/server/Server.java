@@ -138,6 +138,33 @@ public class Server implements Runnable{
 						   }
 					   }
 					   break;
+					   // 900+"|"+id ==> id를 제거한다 
+					   case 900: //나가기면 ...
+					   {
+						   String mid=st.nextToken();
+						   messageAll(900+"|"+id);//테이블에서 id를 제거 (남아 있는 사람처리)
+						   // 제거
+						   for(int i=0;i<waitVc.size();i++)
+						   {
+							   Client c=waitVc.get(i);
+							   if(c.id.equals(mid))
+							   {
+								   messageTo(990+"|");// 윈도우를 종료한다 (나가는 사람 처리)
+								   waitVc.remove(i);// 저장된 id를 지운다 
+								   in.close();
+								   out.close(); // 통신을 정지한다 
+								   break;// 번호 => 임의로 만든다 ==> 웹(파일명)
+								   // login.jsp , exit.jsp.....
+								   // 구분 => 숫자,문자열 ...
+							   }
+						   }
+					   }
+					   break;
+					   case 300:
+					   {
+						   messageAll(300+"|["+name+"]"+st.nextToken());
+					   }
+					   break;
 					}
 					
 				}

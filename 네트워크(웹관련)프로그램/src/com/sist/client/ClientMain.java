@@ -25,6 +25,7 @@ public class ClientMain extends JFrame implements ActionListener,Runnable{
 	private BufferedReader in;// 서버에서 보내준 값을 받는 역할 ==> 쓰레드이용 ==> in.readLine()
 	// 단어 구분 ==> StringTokenizer() 
 	// 100|id|name|sex ==> 오라클 (SELECT..) , 웹(파일명 구분)
+	private String id;
     public ClientMain()
     {
     	setLayout(card);
@@ -34,7 +35,9 @@ public class ClientMain extends JFrame implements ActionListener,Runnable{
     	setSize(1150, 850);
     	setVisible(true);
     	setDefaultCloseOperation(EXIT_ON_CLOSE); // X 버튼 클릭시 메모리 해제
-    	login.b1.addActionListener(this);
+    	login.b1.addActionListener(this);//로그인 
+    	wr.b6.addActionListener(this);//나가기
+    	wr.tf.addActionListener(this);//채팅 // 300
     }
 	public static void main(String[] args) {
 		// TODO Auto-generated method stub
@@ -45,6 +48,7 @@ public class ClientMain extends JFrame implements ActionListener,Runnable{
         new ClientMain();
 	}
 	@Override
+	// 서버에 요청 
 	public void actionPerformed(ActionEvent e) {
 		// TODO Auto-generated method stub
 		if(e.getSource()==login.b1)
@@ -75,6 +79,29 @@ public class ClientMain extends JFrame implements ActionListener,Runnable{
 			// 입력된 데이터를 서버로 전송 => 서버는 데이터를 받아서 저장 => 통신시 사용이 가능게 만든다 
 			
 			connection(id, name, sex);
+		}
+		// 나가기 
+		else if(e.getSource()==wr.b6)
+		{
+			try
+			{
+				out.write((900+"|"+id+"\n").getBytes());
+			}catch(Exception ex) {}
+		}
+		// 채팅 요청 
+		else if(e.getSource()==wr.tf)
+		{
+			String msg=wr.tf.getText(); // 사용자가 입력한 값
+			if(msg.trim().length()<1) // 입력이 안된 겨우
+				return; // 메소드 종료 
+			
+			try
+			{
+				// 채팅 문자열 전송 (서버로 전송 => out.write() )
+				out.write((300+"|"+msg+"\n").getBytes()); // 웹 => 주소란  ==> 데이터
+				// ?데이터&데이터&데이터....
+			}catch(Exception ex) {}
+			wr.tf.setText("");
 		}
 	}
 	/*
@@ -154,7 +181,35 @@ public class ClientMain extends JFrame implements ActionListener,Runnable{
 				  break;
 				  case 110://화면 변경 => (로그인창=>대기실) 
 				  {
-					  card.show(getContentPane(), "WR");  
+					  id=st.nextToken();// 서버에서 보내준 id를 저장 
+					  setTitle(id);// 윈도우 제목 출력 
+					  card.show(getContentPane(), "WR");  // 화면을 변경 
+				  }
+				  break;
+				  case 990: // 나가는 사람 (윈도우 종료) 
+				  {
+					  dispose(); // 메모리 해제
+					  System.exit(0);// 프로그램 종료 ==> 모든 명령(서버에서 내린다 ==> 번호)
+				  }
+				  break;
+				  case 900: //남아 있는 사람 처리 
+				  {
+					  String mid=st.nextToken();
+					  String temp="";
+					  for(int i=0;i<wr.model2.getRowCount();i++)
+					  {
+						  temp=wr.model2.getValueAt(i, 0).toString();
+						  if(mid.equals(temp))
+						  {
+							  wr.model2.removeRow(i);
+							  break;
+						  }
+					  }
+				  }
+				  break;
+				  case 300://채팅문장열이 들어온 경우
+				  {
+					  wr.ta.append(st.nextToken()+"\n");//서버=> 전송 => 받아서 출력 
 				  }
 				  break;
 				}
