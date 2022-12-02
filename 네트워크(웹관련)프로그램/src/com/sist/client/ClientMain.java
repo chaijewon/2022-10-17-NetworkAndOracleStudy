@@ -28,9 +28,9 @@ public class ClientMain extends JFrame implements ActionListener,Runnable{
     public ClientMain()
     {
     	setLayout(card);
-    	add("WR",wr);
-    	add("LOGIN",login);
     	
+    	add("LOGIN",login);
+    	add("WR",wr);
     	setSize(1150, 850);
     	setVisible(true);
     	setDefaultCloseOperation(EXIT_ON_CLOSE); // X 버튼 클릭시 메모리 해제
@@ -74,7 +74,7 @@ public class ClientMain extends JFrame implements ActionListener,Runnable{
 			}
 			// 입력된 데이터를 서버로 전송 => 서버는 데이터를 받아서 저장 => 통신시 사용이 가능게 만든다 
 			
-			
+			connection(id, name, sex);
 		}
 	}
 	/*
@@ -121,7 +121,8 @@ public class ClientMain extends JFrame implements ActionListener,Runnable{
 			// 로그인 요청 
 			out.write((100+"|"+id+"|"+name+"|"+sex+"\n").getBytes());
 		}catch(Exception ex) {}
-		// 서버로부터 결과값을 받아와라 ==> Thread (단방향) => 보내기(클라이언트에서 처리) / 읽기(쓰레드) ==> 동시에 수행 
+		// 서버로부터 결과값을 받아와라 ==> Thread (단방향) => 보내기(클라이언트에서 처리) / 읽기(쓰레드) ==> 동시에 수행
+		new Thread(this).start();
 		
 	}
 	// 서버에서 보내준 데이터를 출력하는 역할 => 쓰레드 제작 
@@ -142,9 +143,20 @@ public class ClientMain extends JFrame implements ActionListener,Runnable{
 				switch(protocol)
 				{
 				  case 100://로그인 처리 
-					 break;
+				  {
+					  String[] data= {
+							  st.nextToken(), //id
+							  st.nextToken(), //name
+							  st.nextToken()  //sex
+					  };
+					  wr.model2.addRow(data);
+				  }
+				  break;
 				  case 110://화면 변경 => (로그인창=>대기실) 
-					 break;
+				  {
+					  card.show(getContentPane(), "WR");  
+				  }
+				  break;
 				}
 			}
 		}catch(Exception ex){}
