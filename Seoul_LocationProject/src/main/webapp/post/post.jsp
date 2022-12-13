@@ -4,6 +4,7 @@
     LocationDAO dao=new LocationDAO();
     ArrayList<ZipcodeVO> list=dao.postfind();
 %>
+
 <!DOCTYPE html>
 <html>
 <head>

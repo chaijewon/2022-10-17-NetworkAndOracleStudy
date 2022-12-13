@@ -95,7 +95,7 @@ public class LocationDAO {
 	   try
 	   {
 		   getConnection();
-		   String sql="SELECT zipcode,sido,gugun,dong,NVL(bunji,'&nbsp;') FROM zipcode WHERE dong LIKE '%서초%'";
+		   String sql="SELECT zipcode,sido,gugun,dong,NVL(bunji,' ') FROM zipcode WHERE dong LIKE '%서초%'";
 		   ps=conn.prepareStatement(sql);
 		   ResultSet rs=ps.executeQuery();
 		   while(rs.next())
@@ -105,7 +105,7 @@ public class LocationDAO {
 			  vo.setSido(rs.getString(2));
 			  vo.setGugun(rs.getString(3));
 			  vo.setDong(rs.getString(4));
-			  vo.setDong(rs.getString(5));
+			  vo.setBunji(rs.getString(5));
 			  list.add(vo);
 		   }
 		   rs.close();
