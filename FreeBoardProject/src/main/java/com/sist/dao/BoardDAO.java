@@ -154,6 +154,28 @@ public class BoardDAO {
     //------------------------------------
     // 4. 수정  ==> UPDATE
     // 5. 삭제  ==> DELETE
+    public void boardDelete(int no)
+    {
+    	try
+    	{
+    		//1. 연결
+    		getConnection();
+    		//2. SQL문장 
+    		String sql="DELETE FROM freeboard "
+    				  +"WHERE no="+no;
+    		//3. SQL문장 전송
+    		ps=conn.prepareStatement(sql);
+    		//4. 실행 요청 
+    		ps.executeUpdate(); //commit()
+    	}catch(Exception ex)
+    	{
+    		ex.printStackTrace();
+    	}
+    	finally
+    	{
+    		disConnection();
+    	}
+    }
     //----------------------------------- 본인 여부 확인 (비밀번호 비교)
     // 6. 검색  ==> SELECT (LIKE)
 }

@@ -64,7 +64,7 @@ public class BoardDetail extends HttpServlet {
 		 out.println("<tr>");
 		 out.println("<td colspan=4 class=text-right>");
 		 out.println("<a href=# class=\"btn btn-xs btn-danger\">수정</a>");
-		 out.println("<a href=# class=\"btn btn-xs btn-warning\">삭제</a>");
+		 out.println("<a href=BoardDelete?no="+vo.getNo()+" class=\"btn btn-xs btn-warning\">삭제</a>");
 		 out.println("<a href=BoardList class=\"btn btn-xs btn-info\">목록</a>");
 		 out.println("</td>");
 		 out.println("</tr>");
