@@ -2,6 +2,7 @@ package com.sist.main;
 
 import com.sist.dao.BookDAO;
 import com.sist.dao.BookVO;
+import com.sist.dao.CustomerVO;
 
 import java.util.*;
 public class BookMainClass {
@@ -24,10 +25,20 @@ public class BookMainClass {
         			+vo.getPublisher()+" "
         			+vo.getPrice());
         }*/
-        ArrayList<String> list=dao.book3_3();
+        /*ArrayList<String> list=dao.book3_3();
         for(String s:list)
         {
         	System.out.println(s);
+        }*/
+        ArrayList<CustomerVO> list=dao.book3_21();
+        for(CustomerVO vo:list)
+        {
+        	System.out.println(vo.getName()+" "
+                            +vo.getAddress()+" "
+                            +vo.getPhone()+" "
+                            +vo.getOvo().getBookid()+" "
+                            +vo.getOvo().getSaleprice()+" "
+                            +vo.getOvo().getOrderdate().toString());
         }
         
 	}

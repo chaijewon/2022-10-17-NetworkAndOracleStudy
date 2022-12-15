@@ -221,6 +221,79 @@ public class BookDAO {
     	}
     	return list;
     }
+    // 조인 => 고객과 고객의 주문에 관한 데이터를 모두 보이시오.
+    /*
+     *   customer
+     *      CUSTID  NOT NULL NUMBER(2)    
+			NAME             VARCHAR2(40) 
+			ADDRESS          VARCHAR2(50) 
+			PHONE            VARCHAR2(20)
+		 orders
+		    ORDERID   NOT NULL NUMBER(2) 
+			CUSTID             NUMBER(2) 
+			BOOKID             NUMBER(2) 
+			SALEPRICE          NUMBER(8) 
+			ORDERDATE          DATE 
+     */
+    public ArrayList<CustomerVO> book3_21()
+    {
+    	ArrayList<CustomerVO> list=new ArrayList<CustomerVO>();
+    	try
+    	{
+    		//1. 연결 
+    		getConnection();
+    		//2. SQL문장 제작 
+    		// SQL 명령어가 올바르게 종료되지 않았습니다 ==> 공백 
+    		// 내부 변환 안됨 => 데이터형이 틀리다 
+    		// IN OUT ==> ?에 값을 지정하지 않는 경우 
+    		// NULL => URL이 틀린 경우 
+    		/////////////////////////////////////////////////////////////////////
+    		String sql="SELECT name,address,phone,bookid,saleprice,orderdate "
+    				  +"FROM customer,orders "
+    				  +"WHERE customer.custid=orders.custid "
+    				  +"ORDER BY customer.custid";
+    	    /////////////////////////////////////////////////////////////////////
+    		/*
+    		 *   자바에 데이터를 읽기
+    		 *   ----------------
+    		 *   1. 일반 SQL 문장 (table , view) 
+    		 *   2. JOIN : 포함 클래스 
+    		 *   3. SubQuery : 포함 클래스 
+    		 *   4. 인라인뷰 => 페이지
+    		 *   
+    		 */
+    		//3. 오라클 전송 
+    		ps=conn.prepareStatement(sql);
+    		//4. 결과값을 가지고 온다 
+    		ResultSet rs=ps.executeQuery();
+    		//5. ArrayList값을 추가
+    		while(rs.next())
+    		{
+    			////////////////////////////////////////////////////////////////
+    			CustomerVO vo=new CustomerVO();
+    			vo.setName(rs.getString(1));
+    			vo.setAddress(rs.getString(2));
+    			vo.setPhone(rs.getString(3));
+    			vo.getOvo().setBookid(rs.getInt(4));
+    			vo.getOvo().setSaleprice(rs.getInt(5));
+    			vo.getOvo().setOrderdate(rs.getDate(6));
+    			list.add(vo);
+    			///////////////////////////////////////////////////////////////
+    			
+    		}
+    		rs.close();
+    		
+    	}catch(Exception ex)
+    	{
+    		ex.printStackTrace();//오류확인
+    	}
+    	finally
+    	{
+    		// 해제 
+    		disConnection();
+    	}
+    	return list;
+    }
 }
 
 
